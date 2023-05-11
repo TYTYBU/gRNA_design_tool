@@ -2,7 +2,7 @@ setwd("~/Library/CloudStorage/OneDrive-Personal/Tian_Workfile/BWH/BE_design")
 
 library(openxlsx)
 library(tidyverse)
-source("hepG2_design_functions_v2.R")
+source("./gRNA_design_tool/hepG2_design_functions_v2.R")
 
 
 # required columns for df.main: target_id, chr, hg19_pos

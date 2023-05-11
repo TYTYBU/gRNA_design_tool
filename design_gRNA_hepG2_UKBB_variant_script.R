@@ -1,6 +1,6 @@
 setwd("~/Library/CloudStorage/OneDrive-Personal/Tian_Workfile/BWH/BE_design")
 library(openxlsx)
-source("hepG2_design_functions_v2.R")
+source("./gRNA_design_tool/hepG2_design_functions_v2.R")
 
 # import gene list
 df.raw = read.xlsx("1022_LDLcodingvariantBE_genes.xlsx", sheet = 1)

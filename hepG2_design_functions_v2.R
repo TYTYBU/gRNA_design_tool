@@ -1,9 +1,9 @@
-get_mane_hg19 <- function(gene_list){
+get_mane_hg19 <- function(gene_list, current_url = "https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/MANE.GRCh38.v1.1.ensembl_genomic.gtf.gz"){
   library(rtracklayer)
   library(liftOver)
   
   # import mane gtf
-  df.mane_hg38 = import("https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/MANE.GRCh38.v1.0.ensembl_genomic.gtf.gz")
+  df.mane_hg38 = import(current_url)
   
   if (!all(gene_list %in% df.mane_hg38$gene_name)){
     ind = which(!(gene_list %in% df.mane_hg38$gene_name))
@@ -34,7 +34,7 @@ get_mane_hg19_cds <- function(df.mane_hg19, detect_range=50){
   end(temp_cds) = end(temp_cds) + detect_range
   df.mane_hg19_cds$cds_extend_start = start(temp_cds)
   df.mane_hg19_cds$cds_extend_end = end(temp_cds)
-  df.mane_hg19_cds$cds_extend_seq = getSeq(genome, temp_cds)
+  df.mane_hg19_cds$cds_extend_seq = as.character(getSeq(genome, temp_cds))
   
   return(df.mane_hg19_cds)
 }
@@ -56,7 +56,7 @@ get_mane_hg19_exon <- function(df.mane_hg19, detect_range=50){
   end(temp_exon) = exon_start + detect_range
   df.mane_hg19_exon$exon_start_extend_start = start(temp_exon)
   df.mane_hg19_exon$exon_start_extend_end = end(temp_exon)
-  df.mane_hg19_exon$exon_start_extend_seq = getSeq(genome, temp_exon)
+  df.mane_hg19_exon$exon_start_extend_seq = as.character(getSeq(genome, temp_exon))
   
   temp_exon = df.mane_hg19_exon
   strand(temp_exon) = "+"
@@ -65,7 +65,7 @@ get_mane_hg19_exon <- function(df.mane_hg19, detect_range=50){
   end(temp_exon) = exon_end + detect_range
   df.mane_hg19_exon$exon_end_extend_start = start(temp_exon)
   df.mane_hg19_exon$exon_end_extend_end = end(temp_exon)
-  df.mane_hg19_exon$exon_end_extend_seq = getSeq(genome, temp_exon)
+  df.mane_hg19_exon$exon_end_extend_seq = as.character(getSeq(genome, temp_exon))
   
   # get max exon number for each gene
   df.mane_hg19_exon$total_exon_number = 1
