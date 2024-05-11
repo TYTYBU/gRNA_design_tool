@@ -1,4 +1,28 @@
-get_mane_hg19 <- function(gene_list, current_url = "https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/MANE.GRCh38.v1.1.ensembl_genomic.gtf.gz"){
+get_mane_v2 <- function(gene_list, hg19=F, current_url = "https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/MANE.GRCh38.v1.2.ensembl_genomic.gtf.gz"){
+  library(rtracklayer)
+  library(liftOver)
+  
+  # import mane gtf
+  df.mane_hg38 = import(current_url)
+  
+  if (!all(gene_list %in% df.mane_hg38$gene_name)){
+    ind = which(!(gene_list %in% df.mane_hg38$gene_name))
+    simpleError(message = paste0("Some genes are not found in MANE: ", paste(gene_list[ind], collapse = ",")))
+  }
+  df.mane_hg38 = df.mane_hg38[(df.mane_hg38$gene_name %in% gene_list),]
+  
+  if (hg19){
+    # liftover from hg38 coordinates to hg19 coordinates
+    ch = import.chain(system.file(package="liftOver", "extdata", "hg38ToHg19.over.chain"))
+    df.mane_hg19 = unlist(liftOver(df.mane_hg38, ch))
+    
+    return(df.mane_hg19)
+  } else {
+    return(df.mane_hg38)
+  }
+}
+
+get_mane_hg19 <- function(gene_list, current_url = "https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/MANE.GRCh38.v1.2.ensembl_genomic.gtf.gz"){
   library(rtracklayer)
   library(liftOver)
   
